@@ -1,2 +1,0 @@
-# chatgptx1
- 1
