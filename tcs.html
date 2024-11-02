@@ -9,6 +9,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         body {
@@ -16,34 +18,106 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-            flex-direction: column;
+            background-color: #f5f5f5;
+            font-family: system-ui, sans-serif;
+            touch-action: none;
         }
 
         .game-container {
             width: 100%;
             max-width: 600px;
-            background-color: #fff;
-            border: 2px solid #333;
-            border-radius: 10px;
+            margin: 1rem;
+            background: #1a1a1a;
+            border-radius: 1rem;
             overflow: hidden;
+            position: relative;
         }
 
         .game-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            background-color: #333;
-            color: #fff;
+            padding: 1rem;
+            color: white;
+        }
+
+        #score {
+            font-size: 1.25rem;
+            font-weight: bold;
         }
 
         .game-board {
             width: 100%;
-            height: 400px;
+            aspect-ratio: 3/2;
             position: relative;
-            background-color: #e0e0e0;
+            background: #2a2a2a;
+            overflow: hidden;
+        }
+
+        .controls {
+            padding: 1rem;
+        }
+
+        .direction-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            max-width: 240px;
+            margin: 0 auto;
+        }
+
+        .direction-btn {
+            aspect-ratio: 1;
+            border: none;
+            background: #333;
+            color: white;
+            font-size: 1.25rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .direction-btn:active {
+            background: #555;
+        }
+
+        .up-btn { grid-column: 2; grid-row: 1; }
+        .left-btn { grid-column: 1; grid-row: 2; }
+        .down-btn { grid-column: 2; grid-row: 2; }
+        .right-btn { grid-column: 3; grid-row: 2; }
+
+        .game-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .control-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #start-pause {
+            background: #4CAF50;
+            color: white;
+        }
+
+        #start-pause:active {
+            background: #45a049;
+        }
+
+        .reset-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .reset-btn:active {
+            background: #da190b;
         }
 
         .snake-segment {
@@ -52,79 +126,144 @@
             height: 20px;
             background-size: cover;
             background-position: center;
+            transition: all 0.15s linear;
         }
 
         .snake-head {
-            background-image: url('http://sma7pfw1f.hn-bkt.clouddn.com/1730477944916.png');
+            background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1730477944916-ByFfGWTOR8VoaCMKNMUCHEedaBwIau.png');
+            z-index: 3;
         }
 
         .snake-body {
-            background-image: url('http://sma7pfw1f.hn-bkt.clouddn.com/6ebfb6189c16752ecf920ba3823f404.jpg');
+            background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/6ebfb6189c16752ecf920ba3823f404-lhR6ldppIkVfPFoTVKkk7GbT7rZvi0.jpg');
+            z-index: 2;
         }
 
         .snake-tail {
-            background-image: url('http://sma7pfw1f.hn-bkt.clouddn.com/713b530148610a6ddf91db23aabc5a6.jpg');
+            background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/713b530148610a6ddf91db23aabc5a6-10R2fHpZgLMljqHojvZwLAzrzwKQBC.jpg');
+            z-index: 1;
         }
 
         .food {
             position: absolute;
             width: 20px;
             height: 20px;
-            background-image: url('http://sma7pfw1f.hn-bkt.clouddn.com/6934ea617d2c4f09e7108d23213edb3.jpg');
+            background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/6934ea617d2c4f09e7108d23213edb3-Wb9KHgJKNkEC9CIHsyaZEnpF9smw8x.jpg');
             background-size: contain;
+            background-position: center;
             background-repeat: no-repeat;
+            z-index: 0;
         }
 
-        .controls {
+        .victory-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 10px;
-            background-color: #333;
-        }
-
-        .control-row {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .control-btn {
-            padding: 15px;
-            background-color: #555;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 20px;
-            width: 60px;
-            height: 60px;
-        }
-
-        .control-btn:hover {
-            background-color: #777;
-        }
-
-        #start-pause {
-            background-color: #4CAF50;
-            width: 100%;
-            font-size: 18px;
-        }
-
-        #start-pause:hover {
-            background-color: #45a049;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
         .heart {
-            display: none;
+            position: relative;
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            transform: rotate(45deg);
+            animation: pulse 1s infinite alternate;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -100px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: -100px;
+        }
+
+        .victory-message {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 48px;
-            color: red;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            color: white;
+            font-size: 1.5rem;
             text-align: center;
+            width: 100%;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes pulse {
+            0% { transform: rotate(45deg) scale(1); }
+            100% { transform: rotate(45deg) scale(1.1); }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f0f0f0;
+            opacity: 0;
+        }
+
+        @media (max-width: 480px) {
+            .game-container {
+                margin: 0.5rem;
+            }
+
+            .direction-pad {
+                max-width: 180px;
+            }
+
+            .direction-btn {
+                font-size: 1.125rem;
+            }
+
+            .control-btn {
+                padding: 0.5rem;
+                font-size: 0.875rem;
+            }
+
+            .heart {
+                width: 150px;
+                height: 150px;
+            }
+
+            .heart::before,
+            .heart::after {
+                width: 150px;
+                height: 150px;
+            }
+
+            .heart::before {
+                top: -75px;
+            }
+
+            .heart::after {
+                left: -75px;
+            }
+
+            .victory-message {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
@@ -132,36 +271,40 @@
     <div class="game-container">
         <div class="game-header">
             <div id="score">分数: 0</div>
-            <button id="start-pause" class="control-btn">开始</button>
+            <button id="start-pause" class="control-btn">开始游戏</button>
         </div>
         <div id="game-board" class="game-board"></div>
         <div class="controls">
-            <div class="control-row">
-                <button class="control-btn" onclick="changeDirection('LEFT')">←</button>
-                <button class="control-btn" onclick="changeDirection('UP')">↑</button>
-                <button class="control-btn" onclick="changeDirection('RIGHT')">→</button>
+            <div class="direction-pad">
+                <button class="direction-btn up-btn" onclick="changeDirection('UP')">上</button>
+                <button class="direction-btn left-btn" onclick="changeDirection('LEFT')">左</button>
+                <button class="direction-btn down-btn" onclick="changeDirection('DOWN')">下</button>
+                <button class="direction-btn right-btn" onclick="changeDirection('RIGHT')">右</button>
             </div>
-            <div class="control-row">
-                <button class="control-btn" onclick="changeDirection('DOWN')">↓</button>
+            <div class="game-buttons">
+                <button class="control-btn reset-btn" onclick="resetGame()">重新开始</button>
             </div>
         </div>
-        <div class="heart" id="heart">❤️<br>我爱你，蒙佳欣</div>
+        <div id="victory-screen" class="victory-screen">
+            <div class="heart">
+                <div class="victory-message">蒙佳欣，我爱你！<br>我错啦！</div>
+            </div>
+        </div>
     </div>
 
     <script>
         const gameBoard = document.getElementById('game-board');
         const scoreElement = document.getElementById('score');
         const startPauseButton = document.getElementById('start-pause');
-        const heartElement = document.getElementById('heart');
+        const victoryScreen = document.getElementById('victory-screen');
 
         let snake = [{x: 5, y: 5}];
-        let food = {x: 8, y: 8};
+        let food = {x: 10, y: 10};
         let direction = 'RIGHT';
         let gameInterval;
         let score = 0;
         let isPlaying = false;
-        const gridSize = 20;
-        const cellSize = 20;
+        let cellSize = 20;
 
         function createGameElement(className) {
             const element = document.createElement('div');
@@ -177,20 +320,26 @@
         function drawSnake() {
             gameBoard.innerHTML = '';
             snake.forEach((segment, index) => {
-                let snakeElement;
+                const snakeElement = createGameElement(
+                    index === 0 ? 'snake-segment snake-head' : 
+                    index === snake.length - 1 ? 'snake-segment snake-tail' : 
+                    'snake-segment snake-body'
+                );
+                
                 if (index === 0) {
-                    snakeElement = createGameElement('snake-segment snake-head');
-                } else if (index === snake.length - 1) {
-                    snakeElement = createGameElement('snake-segment snake-tail');
-                } else {
-                    snakeElement = createGameElement('snake-segment snake-body');
+                    const rotation = {
+                        'UP': -90,
+                        'DOWN': 90,
+                        'LEFT': 180,
+                        'RIGHT': 0
+                    };
+                    snakeElement.style.transform = `rotate(${rotation[direction]}deg)`;
                 }
+                
                 setPosition(snakeElement, segment);
                 gameBoard.appendChild(snakeElement);
             });
-        }
 
-        function drawFood() {
             const foodElement = createGameElement('food');
             setPosition(foodElement, food);
             gameBoard.appendChild(foodElement);
@@ -198,6 +347,7 @@
 
         function moveSnake() {
             const head = {...snake[0]};
+            
             switch(direction) {
                 case 'UP': head.y--; break;
                 case 'DOWN': head.y++; break;
@@ -205,32 +355,47 @@
                 case 'RIGHT': head.x++; break;
             }
 
-            if (head.x < 0) head.x = (gameBoard.clientWidth / cellSize) - 1;
-            if (head.x >= gameBoard.clientWidth / cellSize) head.x = 0;
-            if (head.y < 0) head.y = (gameBoard.clientHeight / cellSize) - 1;
-            if (head.y >= gameBoard.clientHeight / cellSize) head.y = 0;
+            const boardWidth = Math.floor(gameBoard.clientWidth / cellSize);
+            const boardHeight = Math.floor(gameBoard.clientHeight / cellSize);
+
+            if (head.x < 0) head.x = boardWidth - 1;
+            if (head.x >= boardWidth) head.x = 0;
+            if (head.y < 0) head.y = boardHeight - 1;
+            if (head.y >= boardHeight) head.y = 0;
+
+            if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+                gameOver();
+                return;
+            }
 
             snake.unshift(head);
 
             if (head.x === food.x && head.y === food.y) {
-                score++;
+                score += 10;
                 scoreElement.textContent = `分数: ${score}`;
-                if (score === 28) {
-                    clearInterval(gameInterval);
-                    heartElement.style.display = 'block';
+                generateFood();
+                
+                if (score >= 280) {
+                    showVictoryScreen();
                     return;
                 }
-                generateFood();
             } else {
                 snake.pop();
             }
+
+            drawSnake();
         }
 
         function generateFood() {
-            food = {
-                x: Math.floor(Math.random() * (gameBoard.clientWidth / cellSize)),
-                y: Math.floor(Math.random() * (gameBoard.clientHeight / cellSize))
-            };
+            const boardWidth = Math.floor(gameBoard.clientWidth / cellSize);
+            const boardHeight = Math.floor(gameBoard.clientHeight / cellSize);
+            
+            do {
+                food = {
+                    x: Math.floor(Math.random() * boardWidth),
+                    y: Math.floor(Math.random() * boardHeight)
+                };
+            } while (snake.some(segment => segment.x === food.x && segment.y === food.y));
         }
 
         function changeDirection(newDirection) {
@@ -240,23 +405,18 @@
                 'LEFT': 'RIGHT',
                 'RIGHT': 'LEFT'
             };
+            
             if (newDirection !== opposites[direction]) {
                 direction = newDirection;
             }
         }
 
-        function gameLoop() {
-            moveSnake();
-            drawSnake();
-            drawFood();
-
-            // Check for collision with self
-            const [head, ...body] = snake;
-            if (body.some(segment => segment.x === head.x && segment.y === head.y)) {
-                clearInterval(gameInterval);
-                alert('游戏结束！你的分数是: ' + score);
-                resetGame();
-            }
+        function gameOver() {
+            clearInterval(gameInterval);
+            isPlaying = false;
+            startPauseButton.textContent = '开始游戏';
+            alert(`游戏结束！得分：${score}`);
+            resetGame();
         }
 
         function resetGame() {
@@ -264,26 +424,106 @@
             direction = 'RIGHT';
             score = 0;
             scoreElement.textContent = '分数: 0';
+            clearInterval(gameInterval);
+            isPlaying = false;
+            startPauseButton.textContent = '开始游戏';
             generateFood();
             drawSnake();
-            drawFood();
-            isPlaying = false;
-            startPauseButton.textContent = '开始';
-            heartElement.style.display = 'none';
+            hideVictoryScreen();
         }
 
         function startPauseGame() {
             if (isPlaying) {
                 clearInterval(gameInterval);
-                startPauseButton.textContent = '继续';
+                startPauseButton.textContent = '继续游戏';
             } else {
-                gameInterval = setInterval(gameLoop, 200);
+                gameInterval = setInterval(moveSnake, 150);
                 startPauseButton.textContent = '暂停';
             }
             isPlaying = !isPlaying;
         }
 
+        function showVictoryScreen() {
+            clearInterval(gameInterval);
+            isPlaying = false;
+            victoryScreen.style.opacity = '1';
+            createConfetti();
+        }
+
+        function hideVictoryScreen() {
+            victoryScreen.style.opacity = '0';
+        }
+
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100  + '%';
+                confetti.style.top = '-10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                victoryScreen.appendChild(confetti);
+
+                const animation = confetti.animate([
+                    { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate(${Math.random() * 100 - 50}px, ${window.innerHeight}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 3000,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    fill: 'forwards'
+                });
+
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            const keyDirections = {
+                'ArrowUp': 'UP',
+                'ArrowDown': 'DOWN',
+                'ArrowLeft': 'LEFT',
+                'ArrowRight': 'RIGHT',
+                'w': 'UP',
+                's': 'DOWN',
+                'a': 'LEFT',
+                'd': 'RIGHT'
+            };
+            
+            if (keyDirections[event.key.toLowerCase()]) {
+                event.preventDefault();
+                changeDirection(keyDirections[event.key.toLowerCase()]);
+            }
+        });
+
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        gameBoard.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+
+        gameBoard.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        });
+
+        gameBoard.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                changeDirection(deltaX > 0 ? 'RIGHT' : 'LEFT');
+            } else {
+                changeDirection(deltaY > 0 ? 'DOWN' : 'UP');
+            }
+        });
+
         startPauseButton.addEventListener('click', startPauseGame);
+
         resetGame();
     </script>
 </body>
