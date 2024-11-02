@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game</title>
+    <title>贪吃蛇游戏</title>
     <style>
         * {
             margin: 0;
@@ -122,14 +122,15 @@
             transform: translate(-50%, -50%);
             font-size: 48px;
             color: red;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="game-container">
         <div class="game-header">
-            <div id="score">Score: 0</div>
-            <button id="start-pause" class="control-btn">Start</button>
+            <div id="score">分数: 0</div>
+            <button id="start-pause" class="control-btn">开始</button>
         </div>
         <div id="game-board" class="game-board"></div>
         <div class="controls">
@@ -205,7 +206,7 @@
 
             if (head.x === food.x && head.y === food.y) {
                 score++;
-                scoreElement.textContent = `Score: ${score}`;
+                scoreElement.textContent = `分数: ${score}`;
                 if (score === 28) {
                     clearInterval(gameInterval);
                     heartElement.style.display = 'block';
@@ -245,7 +246,7 @@
             const [head, ...body] = snake;
             if (body.some(segment => segment.x === head.x && segment.y === head.y)) {
                 clearInterval(gameInterval);
-                alert('Game Over! Your score: ' + score);
+                alert('游戏结束！你的分数是: ' + score);
                 resetGame();
             }
         }
@@ -254,22 +255,22 @@
             snake = [{x: 10, y: 10}];
             direction = 'RIGHT';
             score = 0;
-            scoreElement.textContent = 'Score: 0';
+            scoreElement.textContent = '分数: 0';
             generateFood();
             drawSnake();
             drawFood();
             isPlaying = false;
-            startPauseButton.textContent = 'Start';
+            startPauseButton.textContent = '开始';
             heartElement.style.display = 'none';
         }
 
         function startPauseGame() {
             if (isPlaying) {
                 clearInterval(gameInterval);
-                startPauseButton.textContent = 'Resume';
+                startPauseButton.textContent = '继续';
             } else {
                 gameInterval = setInterval(gameLoop, 200);
-                startPauseButton.textContent = 'Pause';
+                startPauseButton.textContent = '暂停';
             }
             isPlaying = !isPlaying;
         }
