@@ -202,16 +202,17 @@
         }
 
         .victory-message {
-            position: absolute;
-            top: 30%; /* 将文字向上移动 */
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            color: white;
-            font-size: 2rem;
-            text-align: center;
-            width: 80%;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            white-space: nowrap;
+           position: absolute;
+           top: 50%; /* 根据需要调整位置 */
+           left: 50%;
+           transform: translate(-50%, -50%) rotate(-45deg);
+           color: white;
+           font-size: 2rem;
+           text-align: center;
+           width: 80%;
+           text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+           white-space: nowrap;
+           z-index: 1000; /* 设置一个很高的 z-index 值，确保文字在最顶层 */
         }
 
 
