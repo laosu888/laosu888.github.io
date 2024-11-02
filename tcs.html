@@ -55,15 +55,21 @@
         }
 
         .snake-head {
-            background-color: #6b8e23;
+            background-image: url('http://sma7pfw1f.hn-bkt.clouddn.com/1730477944916.png');
         }
 
         .snake-body {
-            background-color: #9acd32;
+            background-image: url('http://sma7pfw1f.hn-bkt.clouddn.com/6ebfb6189c16752ecf920ba3823f404.jpg');
+        }
+
+        .snake-tail {
+            background-image: url('http://sma7pfw1f.hn-bkt.clouddn.com/713b530148610a6ddf91db23aabc5a6.jpg');
         }
 
         .food {
-            background-color: #ff4500;
+            background-image: url('http://sma7pfw1f.hn-bkt.clouddn.com/6934ea617d2c4f09e7108d23213edb3.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
         }
 
         .controls {
@@ -136,7 +142,7 @@
                 <button class="control-btn" onclick="changeDirection('DOWN')">↓</button>
             </div>
         </div>
-        <div class="heart" id="heart">❤️<br>我爱你，蒙佳欣</div>
+        <div class="heart" id="heart">❤️<br>我爱你，蒙佳欣，我错啦！</div>
     </div>
 
     <script>
@@ -168,7 +174,11 @@
         function drawSnake() {
             gameBoard.innerHTML = '';
             snake.forEach((segment, index) => {
-                const snakeElement = createGameElement(index === 0 ? 'snake-segment snake-head' : 'snake-segment snake-body');
+                const snakeElement = createGameElement(
+                    index === 0 ? 'snake-segment snake-head' : 
+                    index === snake.length - 1 ? 'snake-segment snake-tail' : 
+                    'snake-segment snake-body'
+                );
                 setPosition(snakeElement, segment);
                 gameBoard.appendChild(snakeElement);
             });
