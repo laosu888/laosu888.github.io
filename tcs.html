@@ -46,7 +46,7 @@
             background-color: #e0e0e0;
         }
 
-        .snake-segment, .food {
+        .snake-segment {
             position: absolute;
             width: 20px;
             height: 20px;
@@ -67,6 +67,9 @@
         }
 
         .food {
+            position: absolute;
+            width: 20px;
+            height: 20px;
             background-image: url('http://sma7pfw1f.hn-bkt.clouddn.com/6934ea617d2c4f09e7108d23213edb3.jpg');
             background-size: contain;
             background-repeat: no-repeat;
@@ -142,7 +145,7 @@
                 <button class="control-btn" onclick="changeDirection('DOWN')">↓</button>
             </div>
         </div>
-        <div class="heart" id="heart">❤️<br>我爱你，蒙佳欣，我错啦！</div>
+        <div class="heart" id="heart">❤️<br>我爱你，蒙佳欣</div>
     </div>
 
     <script>
@@ -174,11 +177,14 @@
         function drawSnake() {
             gameBoard.innerHTML = '';
             snake.forEach((segment, index) => {
-                const snakeElement = createGameElement(
-                    index === 0 ? 'snake-segment snake-head' : 
-                    index === snake.length - 1 ? 'snake-segment snake-tail' : 
-                    'snake-segment snake-body'
-                );
+                let snakeElement;
+                if (index === 0) {
+                    snakeElement = createGameElement('snake-segment snake-head');
+                } else if (index === snake.length - 1) {
+                    snakeElement = createGameElement('snake-segment snake-tail');
+                } else {
+                    snakeElement = createGameElement('snake-segment snake-body');
+                }
                 setPosition(snakeElement, segment);
                 gameBoard.appendChild(snakeElement);
             });
