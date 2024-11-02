@@ -174,11 +174,12 @@
         .heart {
             position: relative;
             width: 200px;
-            height: 200px;
+            height: 180px; /* 调整高度 */
             background-color: red;
-            transform: rotate(45deg);
+            transform: rotate(45deg) scaleY(0.9); /* 缩小纵向尺寸 */
             animation: pulse 1s infinite alternate;
         }
+
 
         .heart::before,
         .heart::after {
@@ -202,7 +203,7 @@
 
         .victory-message {
             position: absolute;
-            top: 50%;
+            top: 30%; /* 将文字向上移动 */
             left: 50%;
             transform: translate(-50%, -50%) rotate(-45deg);
             color: white;
@@ -212,6 +213,7 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             white-space: nowrap;
         }
+
 
         @keyframes pulse {
             0% { transform: rotate(45deg) scale(1); }
