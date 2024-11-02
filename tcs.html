@@ -156,18 +156,19 @@
         }
 
         .victory-screen {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 9999;
             opacity: 0;
             transition: opacity 0.5s ease;
+            pointer-events: none;
         }
 
         .heart {
@@ -205,10 +206,11 @@
             left: 50%;
             transform: translate(-50%, -50%) rotate(-45deg);
             color: white;
-            font-size: 1.5rem;
+            font-size: 2rem;
             text-align: center;
-            width: 100%;
+            width: 80%;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
         }
 
         @keyframes pulse {
@@ -276,13 +278,13 @@
         <div id="game-board" class="game-board"></div>
         <div class="controls">
             <div class="direction-pad">
-                <button class="direction-btn up-btn" onclick="changeDirection('UP')">上</button>
-                <button class="direction-btn left-btn" onclick="changeDirection('LEFT')">左</button>
-                <button class="direction-btn down-btn" onclick="changeDirection('DOWN')">下</button>
-                <button class="direction-btn right-btn" onclick="changeDirection('RIGHT')">右</button>
+                <button class="direction-btn up-btn" data-direction="UP">上</button>
+                <button class="direction-btn left-btn" data-direction="LEFT">左</button>
+                <button class="direction-btn down-btn" data-direction="DOWN">下</button>
+                <button class="direction-btn right-btn" data-direction="RIGHT">右</button>
             </div>
             <div class="game-buttons">
-                <button class="control-btn reset-btn" onclick="resetGame()">重新开始</button>
+                <button id="reset" class="control-btn reset-btn">重新开始</button>
             </div>
         </div>
         <div id="victory-screen" class="victory-screen">
@@ -296,11 +298,20 @@
         const gameBoard = document.getElementById('game-board');
         const scoreElement = document.getElementById('score');
         const startPauseButton = document.getElementById('start-pause');
+        const resetButton = document.getElementById('reset');
         const victoryScreen = document.getElementById('victory-screen');
+        const gameContainer = document.querySelector('.game-container');
+
+        const DIRECTIONS = {
+            UP: { x: 0, y: -1 },
+            DOWN: { x: 0, y: 1 },
+            LEFT: { x: -1, y: 0 },
+            RIGHT: { x: 1, y: 0 }
+        };
 
         let snake = [{x: 5, y: 5}];
         let food = {x: 10, y: 10};
-        let direction = 'RIGHT';
+        let direction = DIRECTIONS.RIGHT;
         let gameInterval;
         let score = 0;
         let isPlaying = false;
@@ -328,12 +339,12 @@
                 
                 if (index === 0) {
                     const rotation = {
-                        'UP': -90,
-                        'DOWN': 90,
-                        'LEFT': 180,
-                        'RIGHT': 0
+                        [DIRECTIONS.UP.y]: -90,
+                        [DIRECTIONS.DOWN.y]: 90,
+                        [DIRECTIONS.LEFT.x]: 180,
+                        [DIRECTIONS.RIGHT.x]: 0
                     };
-                    snakeElement.style.transform = `rotate(${rotation[direction]}deg)`;
+                    snakeElement.style.transform = `rotate(${rotation[direction.x || direction.y]}deg)`;
                 }
                 
                 setPosition(snakeElement, segment);
@@ -346,15 +357,11 @@
         }
 
         function moveSnake() {
-            const head = {...snake[0]};
+            const head = {
+                x: snake[0].x + direction.x,
+                y: snake[0].y + direction.y
+            };
             
-            switch(direction) {
-                case 'UP': head.y--; break;
-                case 'DOWN': head.y++; break;
-                case 'LEFT': head.x--; break;
-                case 'RIGHT': head.x++; break;
-            }
-
             const boardWidth = Math.floor(gameBoard.clientWidth / cellSize);
             const boardHeight = Math.floor(gameBoard.clientHeight / cellSize);
 
@@ -400,13 +407,13 @@
 
         function changeDirection(newDirection) {
             const opposites = {
-                'UP': 'DOWN',
-                'DOWN': 'UP',
-                'LEFT': 'RIGHT',
-                'RIGHT': 'LEFT'
+                [DIRECTIONS.UP.y]: DIRECTIONS.DOWN.y,
+                [DIRECTIONS.DOWN.y]: DIRECTIONS.UP.y,
+                [DIRECTIONS.LEFT.x]: DIRECTIONS.RIGHT.x,
+                [DIRECTIONS.RIGHT.x]: DIRECTIONS.LEFT.x
             };
             
-            if (newDirection !== opposites[direction]) {
+            if (newDirection.x !== opposites[direction.x] && newDirection.y !== opposites[direction.y]) {
                 direction = newDirection;
             }
         }
@@ -421,7 +428,7 @@
 
         function resetGame() {
             snake = [{x: 5, y: 5}];
-            direction = 'RIGHT';
+            direction = DIRECTIONS.RIGHT;
             score = 0;
             scoreElement.textContent = '分数: 0';
             clearInterval(gameInterval);
@@ -437,7 +444,7 @@
                 clearInterval(gameInterval);
                 startPauseButton.textContent = '继续游戏';
             } else {
-                gameInterval = setInterval(moveSnake, 150);
+                gameInterval = setInterval(moveSnake, 200);
                 startPauseButton.textContent = '暂停';
             }
             isPlaying = !isPlaying;
@@ -447,11 +454,13 @@
             clearInterval(gameInterval);
             isPlaying = false;
             victoryScreen.style.opacity = '1';
+            victoryScreen.style.pointerEvents = 'auto';
             createConfetti();
         }
 
         function hideVictoryScreen() {
             victoryScreen.style.opacity = '0';
+            victoryScreen.style.pointerEvents = 'none';
         }
 
         function createConfetti() {
@@ -480,14 +489,14 @@
 
         document.addEventListener('keydown', (event) => {
             const keyDirections = {
-                'ArrowUp': 'UP',
-                'ArrowDown': 'DOWN',
-                'ArrowLeft': 'LEFT',
-                'ArrowRight': 'RIGHT',
-                'w': 'UP',
-                's': 'DOWN',
-                'a': 'LEFT',
-                'd': 'RIGHT'
+                'ArrowUp': DIRECTIONS.UP,
+                'ArrowDown': DIRECTIONS.DOWN,
+                'ArrowLeft': DIRECTIONS.LEFT,
+                'ArrowRight': DIRECTIONS.RIGHT,
+                'w': DIRECTIONS.UP,
+                's': DIRECTIONS.DOWN,
+                'a': DIRECTIONS.LEFT,
+                'd': DIRECTIONS.RIGHT
             };
             
             if (keyDirections[event.key.toLowerCase()]) {
@@ -499,16 +508,16 @@
         let touchStartX = 0;
         let touchStartY = 0;
 
-        gameBoard.addEventListener('touchstart', (e) => {
+        gameContainer.addEventListener('touchstart', (e) => {
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
         });
 
-        gameBoard.addEventListener('touchmove', (e) => {
+        gameContainer.addEventListener('touchmove', (e) => {
             e.preventDefault();
         });
 
-        gameBoard.addEventListener('touchend', (e) => {
+        gameContainer.addEventListener('touchend', (e) => {
             const touchEndX = e.changedTouches[0].clientX;
             const touchEndY = e.changedTouches[0].clientY;
             
@@ -516,13 +525,20 @@
             const deltaY = touchEndY - touchStartY;
             
             if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                changeDirection(deltaX > 0 ? 'RIGHT' : 'LEFT');
+                changeDirection(deltaX > 0 ? DIRECTIONS.RIGHT : DIRECTIONS.LEFT);
             } else {
-                changeDirection(deltaY > 0 ? 'DOWN' : 'UP');
+                changeDirection(deltaY > 0 ? DIRECTIONS.DOWN : DIRECTIONS.UP);
             }
         });
 
         startPauseButton.addEventListener('click', startPauseGame);
+        resetButton.addEventListener('click', resetGame);
+
+        document.querySelectorAll('.direction-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                changeDirection(DIRECTIONS[btn.dataset.direction]);
+            });
+        });
 
         resetGame();
     </script>
