@@ -18,6 +18,7 @@
             min-height: 100vh;
             background-color: #f0f0f0;
             font-family: Arial, sans-serif;
+            flex-direction: column;
         }
 
         .game-container {
@@ -75,20 +76,29 @@
 
         .controls {
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            gap: 10px;
+            align-items: center;
             padding: 10px;
             background-color: #333;
         }
 
+        .control-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
         .control-btn {
-            padding: 10px 20px;
+            padding: 15px;
             background-color: #555;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 20px;
+            width: 60px;
+            height: 60px;
         }
 
         .control-btn:hover {
@@ -97,10 +107,21 @@
 
         #start-pause {
             background-color: #4CAF50;
+            width: 100%;
         }
 
         #start-pause:hover {
             background-color: #45a049;
+        }
+
+        .heart {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: red;
         }
     </style>
 </head>
@@ -112,17 +133,23 @@
         </div>
         <div id="game-board" class="game-board"></div>
         <div class="controls">
-            <button class="control-btn" onclick="changeDirection('LEFT')">←</button>
-            <button class="control-btn" onclick="changeDirection('UP')">↑</button>
-            <button class="control-btn" onclick="changeDirection('DOWN')">↓</button>
-            <button class="control-btn" onclick="changeDirection('RIGHT')">→</button>
+            <div class="control-row">
+                <button class="control-btn" onclick="changeDirection('LEFT')">←</button>
+                <button class="control-btn" onclick="changeDirection('UP')">↑</button>
+                <button class="control-btn" onclick="changeDirection('RIGHT')">→</button>
+            </div>
+            <div class="control-row">
+                <button class="control-btn" onclick="changeDirection('DOWN')">↓</button>
+            </div>
         </div>
+        <div class="heart" id="heart">❤️<br>我爱你，蒙佳欣</div>
     </div>
 
     <script>
         const gameBoard = document.getElementById('game-board');
         const scoreElement = document.getElementById('score');
         const startPauseButton = document.getElementById('start-pause');
+        const heartElement = document.getElementById('heart');
 
         let snake = [{x: 10, y: 10}];
         let food = {x: 5, y: 5};
@@ -130,7 +157,6 @@
         let gameInterval;
         let score = 0;
         let isPlaying = false;
-
         const gridSize = 20;
 
         function createGameElement(className) {
@@ -180,6 +206,11 @@
             if (head.x === food.x && head.y === food.y) {
                 score++;
                 scoreElement.textContent = `Score: ${score}`;
+                if (score === 28) {
+                    clearInterval(gameInterval);
+                    heartElement.style.display = 'block';
+                    return;
+                }
                 generateFood();
             } else {
                 snake.pop();
@@ -229,6 +260,7 @@
             drawFood();
             isPlaying = false;
             startPauseButton.textContent = 'Start';
+            heartElement.style.display = 'none';
         }
 
         function startPauseGame() {
@@ -243,17 +275,6 @@
         }
 
         startPauseButton.addEventListener('click', startPauseGame);
-
-        document.addEventListener('keydown', (e) => {
-            switch (e.key) {
-                case 'ArrowUp': changeDirection('UP'); break;
-                case 'ArrowDown': changeDirection('DOWN'); break;
-                case 'ArrowLeft': changeDirection('LEFT'); break;
-                case 'ArrowRight': changeDirection('RIGHT'); break;
-                case ' ': startPauseGame(); break; // Spacebar to start/pause
-            }
-        });
-
         resetGame();
     </script>
 </body>
